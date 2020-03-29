@@ -87,4 +87,4 @@ async def invite(ctx):
 pubes = [''] #list of all clycling names
 
 #the secret key!
-client.run('NDM2MTc1ODM4MzYzMzg1ODY2.D0S-4g.0IKnKEhNsyIhKgsrQFwak-Zz6Io')
+client.run('KEY')
