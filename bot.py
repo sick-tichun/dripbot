@@ -2,13 +2,12 @@ import discord
 import asyncio
 import random
 import nekos
-from discord.ext import commands
+from discord.ext import commands, tasks
 from itertools import cycle
 import os
 import subprocess
 
-client = commands.Bot(command_prefix = '')
-
+client = commands.Bot(command_prefix = '!')
 
 @client.event
 async def on_ready():
@@ -16,6 +15,26 @@ async def on_ready():
     print(client.user.name)
     print(client.user.id)
     print('------')
+    change_status.start()
+
+async def on_member_join(member):
+    member.send('have a happy stay :), fortbuck i hate download')
+
+@client.command()
+async def dxmi(ctx, phrase):
+    trans = ''
+    length = len(phrase)
+    for i in range (0, length):
+        if phrase[i:i + 1] in 'aeiouAEIOU':
+            trans = trans + 'x'
+        else:
+            trans = trans + phrase[i:i + 1]
+    await ctx.send(trans)
+
+@client.command()
+async def ddos(ctx, ip):
+    os.system('timeout 3 ping ' + ip + ' -c 5')
+    await ctx.send('pinged ' + ip + ' 5 times for 3 seconds')
 
 @client.command()
 async def spam(ctx, msg, nummy):
@@ -81,10 +100,15 @@ async def shell(ctx, command):
 
 @client.command()
 async def invite(ctx):
+
     await ctx.send('https://discordapp.com/oauth2/authorize?&client_id=436175838363385866&scope=bot&permissions=8%27)/n/n/n@client.event/nasync')
 
-#presence - old cylce
-pubes = [''] #list of all clycling names
+#presence - cylce
+status = cycle(['github.com/sick-tichun', 'with your mum(s)', 'cashin checks', 'hittin it out da glass', 'sub2 tichun on yt', 'doin ya mom', 'clownin and keepin it rock']) #list of all clycling names
+
+@tasks.loop(seconds=4)
+async def change_status():
+    await client.change_presence(activity=discord.Game(next(status)))
 
 #the secret key!
-client.run('KEY')
+client.run('key')
