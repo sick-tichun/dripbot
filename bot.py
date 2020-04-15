@@ -7,6 +7,7 @@ from itertools import cycle
 import os
 import subprocess
 
+key = input('Input the key for yor bot')
 client = commands.Bot(command_prefix = '!')
 
 @client.event
@@ -43,7 +44,7 @@ async def spam(ctx, msg, nummy):
     for i in range(0, int(nummy)):
         await ctx.send(msg + ' ' + str(i + 1))
 
-#poo
+#add
 @client.command()
 async def scumcalc_add(ctx, num1, num2):
     calc = float(num1) + float(num2)
@@ -136,4 +137,4 @@ async def change_status():
     await client.change_presence(activity=discord.Game(next(status)))
 
 #the secret key!
-client.run('NDM2MTc1ODM4MzYzMzg1ODY2.XoDuEQ.6JqXOmh2AQSWn1SGlltVO5-d-xM')
+client.run(key)
