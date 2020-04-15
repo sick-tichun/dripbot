@@ -18,9 +18,11 @@ async def on_ready():
     print('------')
     change_status.start()
 
+#when a member joins put text
 async def on_member_join(member):
     member.send('have a happy stay :), fortbuck i hate download')
 
+#translates your phrase to damian text
 @client.command()
 async def dxmi(ctx, phrase):
     trans = ''
@@ -44,19 +46,19 @@ async def spam(ctx, msg, nummy):
     for i in range(0, int(nummy)):
         await ctx.send(msg + ' ' + str(i + 1))
 
-#add
+#adds 2 numbers
 @client.command()
 async def scumcalc_add(ctx, num1, num2):
     calc = float(num1) + float(num2)
     await ctx.send(calc)
 
-
+#multiplies 2 numbers
 @client.command()
 async def scumcalc_mult(ctx, num1, num2):
     calc = float(num1)*float(num2)
     await ctx.send(calc)
 
-
+#divides 2 numbers
 @client.command()
 async def scumcalc_div(ctx, nummy1, nummy2):
     calc = float(nummy1)/float(nummy2)
