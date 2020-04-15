@@ -122,8 +122,8 @@ async def shell(ctx, command):
         await ctx.send('nanana fathead your not deleting anyyything from this computer')
     else:
         og_output = subprocess.check_output(str(command),shell=True)
-        formatted_output = str(og_output).replace('\\n', '\n')[1:2000]
-        await ctx.send(formatted_output)
+        formatted_output = str(og_output).replace('\\n', '\n')[2:2000]
+        await ctx.send(formatted_output[:-2])
 
 #sends invite link for the bot as i cant be bothered to make it myself anymore
 @client.command()
