@@ -6,6 +6,7 @@ from discord.ext import commands, tasks
 from itertools import cycle
 import os
 import subprocess
+from textblob import TextBlob 
 
 key = input('Input the key for yor bot')
 client = commands.Bot(command_prefix = '!')
@@ -110,6 +111,13 @@ async def hentai(ctx):
 @client.command()
 async def img(ctx, image):
     await ctx.send(nekos.img(str(image)))
+
+#tesxt blob api commands ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
+#translation cpmmand
+@client.command()
+async def trans(ctx, text, lang):
+    await ctx.send(TextBlob(text).translate(to=lang))
 
 #presence - user setting (may be removed as is practically uselsess)
 @client.command()
