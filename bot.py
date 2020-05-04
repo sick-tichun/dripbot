@@ -6,7 +6,8 @@ from discord.ext import commands, tasks
 from itertools import cycle
 import os
 import subprocess
-from textblob import TextBlob 
+from textblob import TextBlob
+from textblob import Word
 
 key = input('Input the key for yor bot')
 client = commands.Bot(command_prefix = '!')
@@ -91,13 +92,13 @@ async def neko(ctx):
 @client.command()
 async def nekospam(ctx, num):
     for i in range(1, int(num)):
-        await ctx.send(nekos.img('neko'))
+        await ctx.send(nekos.img('neko') + ' ' + i)
 
 #sends hentai... however many times you need, no nsfw check as its funny spamming this command everywhere
 @client.command()
 async def hentaispam(ctx, num):
     for i in range(1, int(num)):
-        await ctx.send(nekos.img('hentai'))
+        await ctx.send(nekos.img('hentai') + ' ' + i)
 
 #sends hentai but also checks if its a nsfw enabled channel
 @client.command()
@@ -112,12 +113,18 @@ async def hentai(ctx):
 async def img(ctx, image):
     await ctx.send(nekos.img(str(image)))
 
-#tesxt blob api commands ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+#tesxt blob api commands ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-#translation cpmmand
+#translation command
 @client.command()
 async def trans(ctx, text, lang):
     await ctx.send(TextBlob(text).translate(to=lang))
+
+#defenition command
+#@client.command()
+#async def meaning(ctx, defword):
+#    await ctx.send(Word(defword).define)
+
 
 #presence - user setting (may be removed as is practically uselsess)
 @client.command()
