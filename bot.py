@@ -8,6 +8,8 @@ import os
 import subprocess
 from textblob import TextBlob
 from textblob import Word
+import scentence_creator
+import word_lsit_reader_writer
 
 key = input('Input the key for yor bot')
 client = commands.Bot(command_prefix = '!')
@@ -130,6 +132,20 @@ async def trans(ctx, text, lang):
 @client.command()
 async def playin(ctx, gamer):
     await client.change_presence(activity=discord.Game(gamer))
+
+
+@client.command()
+async def scentence(ctx):
+    await ctx.send(scentence_creator.create())
+
+@client.command()
+async def addword(ctx, word_to_add):
+    word_lsit_reader_writer.word_add(word_to_add)
+    await ctx.send('added ' + word_to_add + ' to the list of words')
+
+@client.command()
+async def readwords(ctx):
+    await ctx.send(word_lsit_reader_writer.word_read())
 
 #shell executes shell commands in the computer hosting the bot! - prevents usage of rm comand becase i dont want to deal with my files being deleted
 @client.command()
