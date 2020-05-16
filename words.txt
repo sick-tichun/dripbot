@@ -1,0 +1,11 @@
+fat
+obese
+dumb
+cow
+man
+woman
+quickly
+slowly
+peacefully
+dripped
+skipped
