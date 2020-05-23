@@ -14,23 +14,19 @@ def create():
         words_list = [line.strip() for line in f]
     count=len(words_list)
 
-
-    tagged_list =[[],[]]
-    print(str(count) + ' words loaded')
-    for i in range(0, count):
-        tagged = nltk.pos_tag(nltk.tokenize.word_tokenize(words_list[i]), tagset='universal')
-        tempword = tagged[0][0]
-        temptag = tagged[0][1]
-        tagged_list[0].append(tempword)
-        tagged_list[1].append(temptag)
-
     
     adjectives = []
     nouns = []
     adverbs = []
     verbs = []
+    tagged_list =[[],[]]
 
+
+    print(str(count) + ' words loaded')
     for i in range(0, count):
+        tagged = nltk.pos_tag(nltk.tokenize.word_tokenize(words_list[i]), tagset='universal')
+        tagged_list[0].append(tagged[0][0])
+        tagged_list[1].append(tagged[0][1])
         if tagged_list[1][i] == 'ADJ':
             adjectives.append(tagged_list[0][i])
         if tagged_list[1][i] == 'NOUN':
@@ -39,6 +35,7 @@ def create():
             adverbs.append(tagged_list[0][i])
         if tagged_list[1][i] == 'VERB':
             verbs.append(tagged_list[0][i])
+
 
     scentence_decider = random.randint(0, 1)
     if scentence_decider == 0:

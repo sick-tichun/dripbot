@@ -11,7 +11,7 @@ from textblob import Word
 import scentence_creator
 import word_lsit_reader_writer
 
-key = input('Input the key for yor bot')
+key = open("key.txt", "r").read()
 client = commands.Bot(command_prefix = '!')
 
 @client.event
@@ -135,7 +135,7 @@ async def playin(ctx, gamer):
 
 
 @client.command()
-async def scentence(ctx):
+async def sentence(ctx):
     await ctx.send(scentence_creator.create())
 
 @client.command()
