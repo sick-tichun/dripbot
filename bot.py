@@ -155,7 +155,7 @@ async def shell(ctx, command):
 
 #Music Commands ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-@client.command()
+@client.command() # basically reduntant/useless
 async def join(ctx):
     "Joins a voice channel"
     global voice
@@ -167,7 +167,7 @@ async def join(ctx):
     else:
         voice = await channel.connect()
 
-@client.command()
+@client.command("stop")
 async def dc(ctx):
     "dcs from da voice"
     await ctx.voice_client.disconnect()
@@ -223,6 +223,15 @@ class YTDLSource(discord.PCMVolumeTransformer):
 
 @client.command()
 async def play(ctx, url):
+    "plays vid from yt!"
+    global voice
+    channel = ctx.message.author.voice.channel
+    voice = get(client.voice_clients, guild=ctx.guild)
+
+    if voice and voice.is_connected():
+        await voice.move_to(channel)
+    else:
+        voice = await channel.connect()
     "plays vid from yt!"
 
     async with ctx.typing():
