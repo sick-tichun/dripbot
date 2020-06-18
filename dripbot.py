@@ -1,4 +1,4 @@
-import discord, asyncio, random, nekos, os, youtube_dl, fortnite_api, nltk, subprocess
+import discord, asyncio, random, nekos, os, youtube_dl, nltk, subprocess
 from discord.ext import commands, tasks
 from discord.utils import get
 from itertools import cycle
@@ -243,18 +243,6 @@ async def play(ctx, url):
 #    h = overwatch_stats.overwatch_hours(btag)
 #    output = btag + 'has played ' + h[0:0] + ' for ' + h[0:1]
 #    await ctx.send(output)
-
-
-
-
-
-#Fortnite API commands ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-f_api = fortnite_api.FortniteAPI(api_key='53f1d51bd301f6c3b2f7655fad036c76cc69a5cd', run_async=False)
-
-@client.command()
-async def fortnite_shop(ctx):
-    shop = f_api.shop.fetch()
-    await ctx.send(shop)
 
 
 #Misc ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
