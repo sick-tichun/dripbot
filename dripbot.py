@@ -1,17 +1,15 @@
-import discord, asyncio, random, nekos, os, youtube_dl
+import discord, asyncio, random, nekos, os, youtube_dl, fortnite_api, nltk, subprocess
 from discord.ext import commands, tasks
 from discord.utils import get
 from itertools import cycle
-import subprocess
 from textblob import TextBlob, Word
 import scentence_creator
 import word_lsit_reader_writer
-import nltk
-nltk.download('wordnet')
+import emojilist
 
 
 key = open("key.txt", "r").read()
-client = commands.Bot(command_prefix = '£')
+client = commands.Bot(command_prefix = 'n')
 
 @client.event
 async def on_ready():
@@ -22,6 +20,7 @@ async def on_ready():
     change_status.start()
 
 #when a member joins put text
+@client.event
 async def on_member_join(member):
     member.send('have a happy stay')
 
@@ -47,7 +46,7 @@ async def ddos(ctx, ip):
 async def spam(ctx, msg, nummy):
     "spams a message the specified amount of times"
     for i in range(0, int(nummy)):
-        await ctx.send(msg + ' ' + str(i + 1))
+        await ctx.send(msg + ' ' + str(i + 1) + '/' + str(nummy))
 
 @client.command()
 async def scumcalc_add(ctx, num1, num2):
@@ -92,26 +91,21 @@ async def sxd(ctx):
     await ctx.send(nekos.why())
 
 @client.command()
-async def hentaispam(ctx, num):
-    "sends hentai... however many times you want, no nsfw check :()"
-    for i in range(1, int(num)):
-        await ctx.send(nekos.img('hentai') + ' ' + i)
-
-@client.command()
-async def hentai(ctx):
-    "sends hentai but also checks if its a nsfw enabled channel"
+async def img(ctx, img):
+    "sends an image from any of the nekos.life api's categories but also checks if its a nsfw enabled channel"
     if ctx.channel.is_nsfw()==True:
-        await ctx.send(nekos.img('hentai'))
+        await ctx.send(nekos.img(img))
     else: 
         await ctx.send('sorry buddy but this isnt a nsfw channel')
 
 @client.command()
-async def img(ctx, image):
-    "sends an image from any of the nekos.life api's categories"
-    await ctx.send(nekos.img(str(image)))
-
+async def dmimg(ctx, user: discord.User, img, num):
+    "dms nekos.life img to the specified user however many times you want"
+    for i in range(0, int(num)):
+        await user.send(nekos.img(img) + ' ' + str(i + 1) + '/' + str(num))
 
 #tesxt blob api commands ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+nltk.download('wordnet')
 
 @client.command()
 async def trans(ctx, text, lang):
@@ -167,7 +161,7 @@ async def join(ctx):
     else:
         voice = await channel.connect()
 
-@client.command("stop")
+@client.command()
 async def dc(ctx):
     "dcs from da voice"
     await ctx.voice_client.disconnect()
@@ -241,10 +235,134 @@ async def play(ctx, url):
     await ctx.send('Now playing: {}'.format(player.title))
 
 
-#Misc ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#Overwatch commands ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+#@client.command()
+#async def ow_hours(ctx, btag):
+#    "returns hero hours for specified battle.net account"
+#    h = overwatch_stats.overwatch_hours(btag)
+#    output = btag + 'has played ' + h[0:0] + ' for ' + h[0:1]
+#    await ctx.send(output)
+
+
+
+
+
+#Fortnite API commands ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+f_api = fortnite_api.FortniteAPI(api_key='53f1d51bd301f6c3b2f7655fad036c76cc69a5cd', run_async=False)
+
+@client.command()
+async def fortnite_shop(ctx):
+    shop = f_api.shop.fetch()
+    await ctx.send(shop)
+
+
+#Misc ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+verbose = False
+@client.command()
+async def verbose_mode(ctx, YorN : str):
+    "Verbose mode sends every message sent to the server to the users dms and logs all messages into a file.  to use verbosemode use the command with y/n after it; to check verbosemode's status, do verbose_mode ?" 
+    global verbose
+    if YorN == 'y':
+        verbose = True
+    if YorN == 'n':
+        verbose = False
+    if YorN == '?':
+        await ctx.send("Currently verbose mode is set to : %s" % str(verbose))
+
+funny = False
+@client.command()
+async def funny_mode(ctx, YorN : str):
+    "Funnymode makes funnies! to use funnymode use the command with y/n after it; to check funnymode's status, do funnymode ?"
+    global funny
+    if YorN == 'y':
+        funny = True
+    if YorN == 'n':
+        funny = False
+    if YorN == '?':
+        await ctx.send("Currently Funny mode is set to : %s" % str(funny))
+
+@client.event # the on_message function section, most of these are toggled on/off by other varibles above
+async def on_message(ctx):
+    if verbose == True:
+        #await ctx.send(str(ctx.author) + ' just sent: ' + ctx.content)
+        logger = open(ctx.guild.name + "_log.txt", "a+")
+        logger.write(str(ctx.author) + ': ' + str(ctx.content) + '\r\n')
+    
+    if funny == True:
+        reaction_choice = random.randint(0, 100)
+        if reaction_choice == 0:            
+            await ctx.add_reaction('🇾')
+            await ctx.add_reaction('🅾️')
+            await ctx.add_reaction('🇷')
+            await ctx.add_reaction('Ⓜ️')
+            await ctx.add_reaction('🇺')
+            await ctx.add_reaction('🇲')
+            await ctx.add_reaction('🇫')
+            await ctx.add_reaction('🅰️')
+            await ctx.add_reaction('🇹')
+        if reaction_choice == 1:
+            await ctx.add_reaction('😹')
+        if reaction_choice == 2:
+            await ctx.add_reaction('😱')
+        if reaction_choice == 3:
+            await ctx.add_reaction('😐')
+        if reaction_choice == 4:
+            await ctx.add_reaction('👶')
+        if reaction_choice == 5:
+            await ctx.add_reaction('🍔')
+        if reaction_choice == 6:
+            await ctx.add_reaction('🇵🇰')
+        if reaction_choice == 7:
+            await ctx.add_reaction('🕍')
+        if reaction_choice == 8:
+            await ctx.add_reaction('🕋')
+        if reaction_choice == 9:
+            await ctx.add_reaction('😬')
+        if reaction_choice == 10:
+            await ctx.add_reaction('😅')
+        if reaction_choice >= 11:
+            randy = random.randint(0, len(emojilist.emojis))
+            await ctx.add_reaction(emojilist.emojis[randy:randy+1])
+    await client.process_commands(ctx)
+    #await ctx.send(discord.message.author() + 'just said : ' +  ctx.content)
+
+
+#@client.event
+#async def on_raw_message_delete(ctx):
+#    if verbose == 'True':
+#        ctx.send(str(ctx.author) + 'just deleted their message, this is what it said: ' + str(ctx.content))
+
+
+#@client.command()
+#async def scum(ctx):
+#    await ctx.send(random.choice(ctx.guild.members))
+#    print(ctx.guild.name)
+#    print(ctx.author)
+
+
+@client.command()
+async def dm(ctx, user: discord.User, msg : str, num):
+    "dms chosen message to specified user however many times you want"
+    if num is None:
+        await user.send(msg)
+    else:
+            for i in range(0, int(num)):
+                await user.send(msg + ' ' + str(i + 1) + '/' + str(num))
+            pass
+    
+    
 
 #presence - automatic cylce
-status = cycle(['github.com/sick-tichun', 'with your mum(s)', 'cashin checks', 'hittin it out da glass', 'sub2 tichun on yt', 'doin ya mom', 'clownin and keepin it rock']) #list of all clycling names
+status = cycle([
+'github.com/sick-tichun',
+'with your mum(s)',
+'cashin checks',
+'hittin it out da glass',
+'sub2 tichun on yt',
+'doin ya mom',
+'clownin and keepin it rock']) #list of all clycling names
 @tasks.loop(seconds=4)
 async def change_status():
     await client.change_presence(activity=discord.Game(next(status)))
