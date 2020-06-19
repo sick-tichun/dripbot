@@ -73,6 +73,17 @@ async def invite(ctx):
     await ctx.send('https://discordapp.com/oauth2/authorize?&client_id=436175838363385866&scope=bot&permissions=8%27)/n/n/n@client.event/nasync')
 
 
+#@client.command()
+#async def shell(ctx, command):
+#    "shell executes shell commands in the computer hosting the bot!"
+#    print (command[0:2])
+#    if command[0:2] == 'rm' or 'sh' or ':(':
+#        await ctx.send('nanana fathead')
+#    else:
+#        og_output = subprocess.check_output(str(command),shell=True)
+#        formatted_output = str(og_output).replace('\\n', '\n')[2:2000]
+#        await ctx.send(formatted_output[:-2])
+
 #neko.life api commands  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 @client.command()
@@ -97,6 +108,12 @@ async def img(ctx, img):
         await ctx.send(nekos.img(img))
     else: 
         await ctx.send('sorry buddy but this isnt a nsfw channel')
+
+@client.command()
+async def spamimg(ctx, img, nummy):
+    "spams a message the specified amount of times"
+    for i in range(0, int(nummy)):
+        await ctx.send(nekos.img(img) + ' ' + str(i + 1) + '/' + str(nummy))
 
 @client.command()
 async def dmimg(ctx, user: discord.User, img, num):
@@ -134,16 +151,6 @@ async def readwords(ctx):
     "sends the entire dictionary of words so fat but gets cut off"
     await ctx.send(word_lsit_reader_writer.word_read())
 
-@client.command()
-async def shell(ctx, command):
-    "shell executes shell commands in the computer hosting the bot!"
-    print (command[0:2])
-    if command[0:2] == 'rm':
-        await ctx.send('nanana fathead your not deleting anyyything from this computer')
-    else:
-        og_output = subprocess.check_output(str(command),shell=True)
-        formatted_output = str(og_output).replace('\\n', '\n')[2:2000]
-        await ctx.send(formatted_output[:-2])
 
 
 
@@ -354,5 +361,8 @@ status = cycle([
 @tasks.loop(seconds=4)
 async def change_status():
     await client.change_presence(activity=discord.Game(next(status)))
+
+
+
 
 client.run(key)
