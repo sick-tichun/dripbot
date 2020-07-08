@@ -3,9 +3,12 @@ from discord.ext import commands, tasks
 from discord.utils import get
 from itertools import cycle
 from textblob import TextBlob, Word
+from gtts import gTTS
 import scentence_creator
 import word_lsit_reader_writer
 import emojilist
+from io import BytesIO
+from tempfile import TemporaryFile
 
 
 key = open("key.txt", "r").read()
@@ -177,12 +180,6 @@ ffmpeg_options = {
     'options': '-vn'
 }
 
-@client.command()
-async def play_local(ctx, query):
-        "Plays a locally stored song"
-        source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(query))
-        ctx.voice_client.play(source)
-        await ctx.send('attempting to play: {}'.format(query))
 
 
 youtube_dl.utils.bug_reports_message = lambda: ''
@@ -223,7 +220,7 @@ class YTDLSource(discord.PCMVolumeTransformer):
         return cls(discord.FFmpegPCMAudio(filename, **ffmpeg_options), data=data)
 
 @client.command()
-async def play(ctx, url):
+async def play(ctx, *, url):
     "plays vid from yt!"
     global voice
     channel = ctx.message.author.voice.channel
@@ -233,13 +230,15 @@ async def play(ctx, url):
         await voice.move_to(channel)
     else:
         voice = await channel.connect()
-    "plays vid from yt!"
 
     async with ctx.typing():
         player = await YTDLSource.from_url(url, stream=True)
         ctx.voice_client.play(player, after=lambda e: print('Player error: %s' % e) if e else None)
 
     await ctx.send('Now playing: {}'.format(player.title))
+
+
+
 
 
 #Overwatch commands ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -251,6 +250,56 @@ async def play(ctx, url):
 #    output = btag + 'has played ' + h[0:0] + ' for ' + h[0:1]
 #    await ctx.send(output)
 
+
+#google tts commands~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+@client.command()
+async def tts(ctx, *, say):
+    "Uses Google text to speach api to join channel and speak"
+    channel = ctx.message.author.voice.channel
+    voice = get(client.voice_clients, guild=ctx.guild)
+
+    if voice and voice.is_connected():
+        await voice.move_to(channel)
+    else:
+        voice = await channel.connect()
+
+    gTTS(say).save(say[0:25] + '.mp3')
+    source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(say[0:25] + '.mp3'))
+    ctx.voice_client.play(source)
+
+@client.command()
+async def langtts(ctx, lang, *, say):
+    "Uses Google text to speach api to join channel and speaks in the desired language"
+    channel = ctx.message.author.voice.channel
+    voice = get(client.voice_clients, guild=ctx.guild)
+
+    if voice and voice.is_connected():
+        await voice.move_to(channel)
+    else:
+        voice = await channel.connect()
+
+    gTTS(say, lang=lang).save(say[0:25] + '.mp3')
+    source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(say[0:25] + '.mp3'))
+    ctx.voice_client.play(source)
+
+
+#@client.command()
+#async def t(ctx, *, say):
+#    "Uses Google text to speach api to join channel and speak"
+#    channel = ctx.message.author.voice.channel
+#    voice = get(client.voice_clients, guild=ctx.guild)
+#
+#    if voice and voice.is_connected():
+#        await voice.move_to(channel)
+#    else:
+#        voice = await channel.connect()
+#
+#    funny = TemporaryFile(suffix='.mp3')
+#    tts = gTTS(say)
+#    tts.write_to_fp(funny)
+#    source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(funny))
+#    ctx.voice_client.play(funny)
 
 #Misc ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
